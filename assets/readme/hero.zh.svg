@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="heroTitle heroDesc">
+  <title id="heroTitle">dsh-plugin-restart — DeepSeek Harness 设置页里的「重启」卡片</title>
+  <desc id="heroDesc">深色技术板。标题与承诺：在设置页点一下，正在服务页面的 dsh web 进程被换掉，页面自己重连。右侧是同一个 3080 端口的四步状态：旧进程出去、端口安静、新实例起来、页面回来；下面是用户实际要做的三步。底部是从一次真实运行量来的时间轴：0.0 秒端口仍在服务、1.2 秒旧进程消失、11 秒启动器就绪、12 秒页面重连。页脚记录 21/21 项检查针对真启动器与真 dsh web，MIT，Windows。</desc>
+
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0V40M0 40H40" stroke="#151d23" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- board -->
+  <rect width="1200" height="760" rx="26" fill="#0a0e11"/>
+  <rect x="16" y="16" width="1168" height="728" rx="18" fill="url(#grid)" stroke="#1d262d" stroke-width="1.5"/>
+
+  <!-- left column: identity, promise, affordance -->
+  <g id="title-block" transform="translate(56 62)">
+    <text id="eyebrow" x="0" y="18" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" letter-spacing="4" fill="#5d7b8a">DEEPSEEK HARNESS · 设置页</text>
+    <text id="repo-name" x="0" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif" font-size="58" font-weight="700" fill="#f1f4f6">dsh-plugin-restart</text>
+    <text id="promise-line-1" x="0" y="158" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif" font-size="26" fill="#c6cfd4">在设置页点一下，正在服务页面的那个</text>
+    <text id="promise-line-2" x="0" y="202" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif" font-size="26" fill="#c6cfd4">dsh web 进程会被换掉，页面自己重连回来。</text>
+
+    <g id="facts" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+      <text x="0" y="264" font-size="23" fill="#8fa3ad">不用终端</text>
+      <text x="130" y="264" font-size="23" fill="#7d8b93">·</text>
+      <text x="156" y="264" font-size="23" fill="#8fa3ad">页面自己重连</text>
+      <text x="330" y="264" font-size="23" fill="#7d8b93">·</text>
+      <text x="356" y="264" font-size="23" fill="#8fa3ad">端口不变</text>
+    </g>
+
+    <g id="affordance" transform="translate(0 322)">
+      <rect x="0" y="0" width="404" height="52" rx="12" fill="#11181d" stroke="#25313a" stroke-width="1"/>
+      <text x="20" y="34" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" fill="#9fb4bf">设置 → 重启 → [重启服务]</text>
+    </g>
+  </g>
+
+  <!-- status pill -->
+  <g id="verified-pill" transform="translate(948 62)">
+    <rect x="0" y="0" width="196" height="42" rx="21" fill="#0f241b" stroke="#2f6a4c" stroke-width="1.5"/>
+    <circle cx="24" cy="21" r="6" fill="#4ade80"/>
+    <text x="44" y="29" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="20" letter-spacing="1.5" fill="#7fe0a6">已验证</text>
+  </g>
+
+  <!-- right column: the four states of one port -->
+  <text id="sequence-label" x="616" y="150" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="21" letter-spacing="4" fill="#5d7b8a">重启时序</text>
+
+  <g id="pipeline">
+    <g id="hop-1">
+      <rect x="616" y="174" width="108" height="104" rx="12" fill="#0d1216" stroke="#232c33" stroke-width="1"/>
+      <text x="631" y="209" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" fill="#6b7b85">:3080</text>
+      <text x="631" y="241" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif" font-size="20" fill="#8b98a1">旧进程退出</text>
+      <circle cx="708" cy="195" r="5" fill="#39434a"/>
+    </g>
+    <g id="hop-2">
+      <rect x="760" y="174" width="108" height="104" rx="12" fill="#0d1216" stroke="#232c33" stroke-width="1"/>
+      <text x="775" y="209" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" fill="#6b7b85">:3080</text>
+      <text x="775" y="241" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif" font-size="20" fill="#8b98a1">端口安静</text>
+      <circle cx="852" cy="195" r="5" fill="#232c33"/>
+    </g>
+    <g id="hop-3">
+      <rect x="904" y="174" width="108" height="104" rx="12" fill="#0d1216" stroke="#232c33" stroke-width="1"/>
+      <text x="919" y="209" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" fill="#6b7b85">:3080</text>
+      <text x="919" y="241" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif" font-size="20" fill="#8b98a1">新实例起来</text>
+      <circle cx="996" cy="195" r="5" fill="#39434a"/>
+    </g>
+    <g id="hop-4">
+      <rect x="1048" y="174" width="108" height="104" rx="12" fill="#0d1216" stroke="#232c33" stroke-width="1"/>
+      <text x="1063" y="209" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" fill="#6b7b85">:3080</text>
+      <text x="1063" y="241" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif" font-size="20" fill="#8b98a1">页面回来</text>
+      <circle cx="1140" cy="195" r="5" fill="#39434a"/>
+    </g>
+
+    <path d="M726 226H758" stroke="#2a343b" stroke-width="3" stroke-dasharray="6 5"/>
+    <path d="M870 226H902" stroke="#2a343b" stroke-width="3" stroke-dasharray="6 5"/>
+    <path d="M1014 226H1046" stroke="#2a343b" stroke-width="3" stroke-dasharray="6 5"/>
+  </g>
+
+  <!-- the three steps a user actually takes -->
+  <g id="howto" transform="translate(616 332)">
+    <rect x="0" y="0" width="540" height="196" rx="12" fill="#0d1216" stroke="#1f282f" stroke-width="1"/>
+    <text x="24" y="40" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="21" letter-spacing="3" fill="#5d7b8a">怎么用</text>
+    <text x="24" y="86" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif" font-size="22" fill="#b9c4cb">1. 安装插件</text>
+    <text x="24" y="126" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif" font-size="22" fill="#b9c4cb">2. 刷新一次页面</text>
+    <text x="24" y="166" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif" font-size="22" fill="#b9c4cb">3. 设置 → 重启 → 点一下</text>
+  </g>
+
+  <!-- evidence row: timings from a real run -->
+  <path d="M56 578H1144" stroke="#1b2329" stroke-width="1"/>
+  <text x="56" y="622" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="21" letter-spacing="3" fill="#5d7b8a">实测</text>
+
+  <g id="timeline" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif">
+    <path d="M288 626H1144" stroke="#232c33" stroke-width="2"/>
+
+    <g id="t1">
+      <circle cx="288" cy="626" r="6" fill="#39434a"/>
+      <text x="288" y="596" font-size="21" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" fill="#7f8d96">0.0s</text>
+      <text x="288" y="664" font-size="21" fill="#b9c4cb">端口仍在服务</text>
+    </g>
+    <g id="t2">
+      <circle cx="544" cy="626" r="6" fill="#39434a"/>
+      <text x="544" y="596" font-size="21" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" fill="#7f8d96">1.2s</text>
+      <text x="544" y="664" font-size="21" fill="#b9c4cb">旧进程消失</text>
+    </g>
+    <g id="t3">
+      <circle cx="800" cy="626" r="6" fill="#39434a"/>
+      <text x="800" y="596" font-size="21" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" fill="#7f8d96">11s</text>
+      <text x="800" y="664" font-size="21" fill="#b9c4cb">启动器就绪</text>
+    </g>
+    <g id="t4">
+      <!-- the end state carries the only accent, and it anchors the right edge -->
+      <circle cx="1144" cy="626" r="7" fill="none" stroke="#4ade80" stroke-width="2.5"/>
+      <text x="1144" y="596" font-size="21" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" fill="#7f8d96" text-anchor="end">12s</text>
+      <text x="1144" y="664" font-size="21" fill="#b9c4cb" text-anchor="end">页面重连</text>
+    </g>
+  </g>
+
+  <!-- footer -->
+  <path d="M56 706H1144" stroke="#1b2329" stroke-width="1"/>
+  <text x="56" y="738" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif" font-size="20" fill="#63727b">21/21 项检查 · 真启动器 + 真 dsh web</text>
+  <text x="1144" y="738" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="20" fill="#63727b">MIT · windows</text>
+</svg>

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/readme/hero.svg" width="100%" alt="dsh-plugin-restart：在 DeepSeek Harness 设置页点一下，正在服务页面的 dsh web 进程被换掉，页面自己重连，全程不用终端。图中是一条四步时序：同一个端口从旧进程退出，到安静，到新实例起来，再到页面回来；下面的实测时间轴记录了一次真实运行：0.0 秒端口仍在服务，1.2 秒旧进程消失，11 秒启动器就绪，12 秒页面重连。">
+  <img src="./assets/readme/hero.zh.svg" width="100%" alt="dsh-plugin-restart：在 DeepSeek Harness 设置页点一下，正在服务页面的 dsh web 进程被换掉，页面自己重连，全程不用终端。图中是一条四步时序：同一个 3080 端口从旧进程退出，到端口安静，到新实例起来，再到页面回来；下面的实测时间轴记录了一次真实运行：0.0 秒端口仍在服务，1.2 秒旧进程消失，11 秒启动器就绪，12 秒页面重连。">
 </p>
 
 <p align="center">
