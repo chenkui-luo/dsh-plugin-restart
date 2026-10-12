@@ -120,6 +120,19 @@ would normally log a failure is the one that just exited.
 - If the port is owned by a process the launcher does not recognise (e.g. a `dsh web` you started by
   hand), the restart takes that port over, including its terminal's process tree.
 
+## Credits
+
+- **DeepSeek Harness (dsh)** — DeepSeek's open-source agent harness, whose plugin protocol
+  (`dsh.bundle` + `cordis.patch.yml`, the dual host/browser plugin shape, and the webserver's
+  trust fence) is what this plugin is built on. Repository:
+  [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) · MIT.
+- **[dsh-market](https://github.com/dsh-market/dsh-market)** — the community plugin market. Its
+  `restart.js` is the reference for the approach used here: delegate to a detached helper, wait
+  for the port to go quiet instead of guessing with a fixed delay, and make a failed restart leave
+  evidence rather than failing silently.
+- **Watt Toolkit / SteamTools** — nothing to do with the plugin's runtime; mentioned only because
+  its local GitHub accelerator is why `scripts/publish-restart.ps1` has to hand git a certificate.
+
 ## License
 
 MIT

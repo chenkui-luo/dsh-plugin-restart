@@ -158,3 +158,25 @@ node runtime-test\ProbeDetachedSpawn.mjs
 
 已知差异：这个沙箱里被结束的端口偶尔长时间不可重绑，所以第 2 项的替换实例用另一个端口
 （`--next-port`）；真实安装里始终是同一个端口，第 3 项验证的正是那条路径。
+
+---
+
+## 8. 致谢
+
+- **DeepSeek Harness (dsh)** —— DeepSeek 开源的 agent harness。本插件建立在它的插件协议之上：
+  `dsh.bundle` + `cordis.patch.yml` 的声明方式、宿主半/浏览器半的双半形态、以及 webserver 的
+  信任围栏。仓库：[deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) · MIT。
+- **[dsh-market](https://github.com/dsh-market/dsh-market)** —— 社区插件市场。它的 `restart.js`
+  是本文做法的参考来源：交给分离的辅助进程、**等端口真的安静**而不是拍一个固定延时、以及让失败的
+  重启留下证据而不是静默失败。
+- **Watt Toolkit / SteamTools** —— 与插件运行无关，只是因为它的本地 GitHub 加速，才让
+  `scripts/publish-restart.ps1` 需要给 git 递一张证书，记在这里免得以后有人困惑。
+
+> 说明：以上是**软件与项目层面的出处标注**。本仓库的提交记录里没有 DeepSeek 的提交，所以 GitHub
+> 首页的 Contributors 列表不会出现他们 —— 那份列表由提交统计生成，不能手工添加；`package.json`
+> 的 `contributors` 字段才是署名所在。
+
+## 9. 许可
+
+MIT
+

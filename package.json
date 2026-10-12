@@ -42,6 +42,13 @@
     "url": "https://github.com/chenkui-luo/dsh-plugin-restart/issues"
   },
   "author": "chenkui-luo",
+  "contributors": [
+    {
+      "name": "DeepSeek",
+      "url": "https://github.com/deepseek-ai/deepseek-harness",
+      "comment": "For DeepSeek Harness (dsh) — this plugin extends it and is built on its plugin protocol."
+    }
+  ],
   "engines": {
     "node": ">=20"
   },
