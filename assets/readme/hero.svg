@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="heroTitle heroDesc">
+  <title id="heroTitle">dsh-plugin-restart — a Restart card inside DeepSeek Harness Settings</title>
+  <desc id="heroDesc">Dark technical board. Title and promise: one click in Settings replaces the running dsh web process and the page reconnects itself. On the right, a four-step sequence shows the same port going from the old process out, to quiet, to a new instance up, to the page back, followed by the three steps a user takes. Below, a measured timeline from a real run records the port still serving at 0.0 seconds, the old process gone at 1.2 seconds, the launcher ready at 11 seconds and the page reconnected at 12 seconds. The footer records 21 of 21 checks against a real launcher and a real dsh web, MIT, Windows.</desc>
+
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0V40M0 40H40" stroke="#151d23" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- board -->
+  <rect width="1200" height="760" rx="26" fill="#0a0e11"/>
+  <rect x="16" y="16" width="1168" height="728" rx="18" fill="url(#grid)" stroke="#1d262d" stroke-width="1.5"/>
+
+  <!-- left column: identity, promise, affordance -->
+  <g id="title-block" transform="translate(56 62)">
+    <text id="eyebrow" x="0" y="18" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" letter-spacing="4" fill="#5d7b8a">DEEPSEEK HARNESS · SETTINGS</text>
+    <text id="repo-name" x="0" y="92" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, sans-serif" font-size="58" font-weight="700" fill="#f1f4f6">dsh-plugin-restart</text>
+    <text id="promise-line-1" x="0" y="158" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, sans-serif" font-size="26" fill="#c6cfd4">One click in Settings replaces the running</text>
+    <text id="promise-line-2" x="0" y="202" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, sans-serif" font-size="26" fill="#c6cfd4">dsh web process. The page reconnects itself.</text>
+
+    <g id="facts" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+      <text x="0" y="264" font-size="23" fill="#8fa3ad">NO TERMINAL</text>
+      <text x="196" y="264" font-size="23" fill="#7d8b93">·</text>
+      <text x="222" y="264" font-size="23" fill="#8fa3ad">PAGE RE-OPENS ITSELF</text>
+      <text x="536" y="264" font-size="23" fill="#7d8b93">·</text>
+      <text x="562" y="264" font-size="23" fill="#8fa3ad">SAME PORT</text>
+    </g>
+
+    <g id="affordance" transform="translate(0 322)">
+      <rect x="0" y="0" width="404" height="52" rx="12" fill="#11181d" stroke="#25313a" stroke-width="1"/>
+      <text x="20" y="34" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" fill="#9fb4bf">Settings → Restart → [Restart]</text>
+    </g>
+  </g>
+
+  <!-- status pill -->
+  <g id="verified-pill" transform="translate(948 62)">
+    <rect x="0" y="0" width="196" height="42" rx="21" fill="#0f241b" stroke="#2f6a4c" stroke-width="1.5"/>
+    <circle cx="24" cy="21" r="6" fill="#4ade80"/>
+    <text x="44" y="29" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="20" letter-spacing="1.5" fill="#7fe0a6">VERIFIED</text>
+  </g>
+
+  <!-- right column: the four states of one port -->
+  <text id="sequence-label" x="616" y="150" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="21" letter-spacing="4" fill="#5d7b8a">RESTART SEQUENCE</text>
+
+  <g id="pipeline">
+    <g id="hop-1">
+      <rect x="616" y="174" width="108" height="104" rx="12" fill="#0d1216" stroke="#232c33" stroke-width="1"/>
+      <text x="631" y="209" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" fill="#6b7b85">:3080</text>
+      <text x="631" y="241" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, sans-serif" font-size="20" fill="#8b98a1">old out</text>
+      <circle cx="708" cy="195" r="5" fill="#39434a"/>
+    </g>
+    <g id="hop-2">
+      <rect x="760" y="174" width="108" height="104" rx="12" fill="#0d1216" stroke="#232c33" stroke-width="1"/>
+      <text x="775" y="209" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" fill="#6b7b85">:3080</text>
+      <text x="775" y="241" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, sans-serif" font-size="20" fill="#8b98a1">quiet</text>
+      <circle cx="852" cy="195" r="5" fill="#232c33"/>
+    </g>
+    <g id="hop-3">
+      <rect x="904" y="174" width="108" height="104" rx="12" fill="#0d1216" stroke="#232c33" stroke-width="1"/>
+      <text x="919" y="209" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" fill="#6b7b85">:3080</text>
+      <text x="919" y="241" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, sans-serif" font-size="20" fill="#8b98a1">new up</text>
+      <circle cx="996" cy="195" r="5" fill="#39434a"/>
+    </g>
+    <g id="hop-4">
+      <rect x="1048" y="174" width="108" height="104" rx="12" fill="#0d1216" stroke="#232c33" stroke-width="1"/>
+      <text x="1063" y="209" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" fill="#6b7b85">:3080</text>
+      <text x="1063" y="241" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, sans-serif" font-size="20" fill="#8b98a1">page back</text>
+      <circle cx="1140" cy="195" r="5" fill="#39434a"/>
+    </g>
+
+    <path d="M726 226H758" stroke="#2a343b" stroke-width="3" stroke-dasharray="6 5"/>
+    <path d="M870 226H902" stroke="#2a343b" stroke-width="3" stroke-dasharray="6 5"/>
+    <path d="M1014 226H1046" stroke="#2a343b" stroke-width="3" stroke-dasharray="6 5"/>
+  </g>
+
+  <!-- the three steps a user actually takes -->
+  <g id="howto" transform="translate(616 332)">
+    <rect x="0" y="0" width="540" height="196" rx="12" fill="#0d1216" stroke="#1f282f" stroke-width="1"/>
+    <text x="24" y="40" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="21" letter-spacing="3" fill="#5d7b8a">HOW TO USE IT</text>
+    <text x="24" y="86" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" fill="#b9c4cb">1. install the plugin</text>
+    <text x="24" y="126" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" fill="#b9c4cb">2. refresh the page once</text>
+    <text x="24" y="166" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" fill="#b9c4cb">3. Settings → Restart → click</text>
+  </g>
+
+  <!-- evidence row: timings from a real run -->
+  <path d="M56 578H1144" stroke="#1b2329" stroke-width="1"/>
+  <text x="56" y="622" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="21" letter-spacing="3" fill="#5d7b8a">MEASURED</text>
+
+  <g id="timeline" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+    <path d="M288 626H1144" stroke="#232c33" stroke-width="2"/>
+
+    <g id="t1">
+      <circle cx="288" cy="626" r="6" fill="#39434a"/>
+      <text x="288" y="596" font-size="21" fill="#7f8d96">0.0s</text>
+      <text x="288" y="664" font-size="21" fill="#b9c4cb">port serving</text>
+    </g>
+    <g id="t2">
+      <circle cx="544" cy="626" r="6" fill="#39434a"/>
+      <text x="544" y="596" font-size="21" fill="#7f8d96">1.2s</text>
+      <text x="544" y="664" font-size="21" fill="#b9c4cb">old gone</text>
+    </g>
+    <g id="t3">
+      <circle cx="800" cy="626" r="6" fill="#39434a"/>
+      <text x="800" y="596" font-size="21" fill="#7f8d96">11s</text>
+      <text x="800" y="664" font-size="21" fill="#b9c4cb">launcher</text>
+    </g>
+    <g id="t4">
+      <!-- the end state carries the only accent, and it anchors the right edge -->
+      <circle cx="1144" cy="626" r="7" fill="none" stroke="#4ade80" stroke-width="2.5"/>
+      <text x="1144" y="596" font-size="21" fill="#7f8d96" text-anchor="end">12s</text>
+      <text x="1144" y="664" font-size="21" fill="#b9c4cb" text-anchor="end">reconnected</text>
+    </g>
+  </g>
+
+  <!-- footer -->
+  <path d="M56 706H1144" stroke="#1b2329" stroke-width="1"/>
+  <text x="56" y="738" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="20" fill="#63727b">21/21 checks · real launcher + real dsh web</text>
+  <text x="1144" y="738" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="20" fill="#63727b">MIT · windows</text>
+</svg>

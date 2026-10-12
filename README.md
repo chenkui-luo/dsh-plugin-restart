@@ -1,43 +1,35 @@
-# dsh-plugin-restart
+<p align="center">
+  <img src="./assets/readme/hero.svg" width="100%" alt="dsh-plugin-restart: one click in DeepSeek Harness Settings replaces the running dsh web process and the page reconnects itself, without a terminal. A four-step sequence shows the same port going from the old process out to quiet to a new instance to the page back, and a measured timeline records a real run: 0.0s port serving, 1.2s old process gone, 11s launcher ready, 12s page reconnected.">
+</p>
 
-[中文](README.zh.md) | English
+<p align="center">
+  <a href="https://github.com/chenkui-luo/dsh-plugin-restart/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-2f6a4c" alt="MIT license"></a>
+  <img src="https://img.shields.io/badge/platform-windows-2f6a4c" alt="Windows">
+  <img src="https://img.shields.io/badge/dsh-%3E%3D0.1.0-2f6a4c" alt="dsh 0.1.0 or newer">
+  <img src="https://img.shields.io/badge/topic-dsh--plugin-2f6a4c" alt="dsh-plugin topic">
+</p>
 
-A **Restart** button inside DeepSeek Harness Settings. One click replaces the `dsh web` process
-that is serving your page, and the page reconnects by itself — no terminal, no re-opening the
-desktop icon.
+**A Restart card in DeepSeek Harness Settings.** One click replaces the `dsh web` process that is
+serving your page — and the page reconnects by itself. No terminal, no re-opening the desktop icon.
 
-Useful after changing a plugin's host half, editing `config.json`, or when you want the in-memory
-state of a session gone.
+That matters because some changes cannot hot-reload:
 
-> Published as a standalone repository: **<https://github.com/chenkui-luo/dsh-plugin-restart>**
-> (this copy ships inside the launcher toolkit it was built alongside; the contents match).
+- you changed a plugin's **host half**, and Node caches imported ES modules by URL;
+- you edited `config.json`, the port, or the workspace;
+- a session holds in-memory state you want gone.
 
-```
-Settings -> Restart -> [Restart server]
-   |  POST /dsh-restart/restart        (same-origin, authenticated)
-   v
-host half (lib/index.js)  --- starts a detached helper, answers the HTTP request, exits itself
-   v
-helper (generated per restart)
-   1. waits for the port to stop accepting connections
-   2. asks your launcher to bring the harness back up
-   3. verifies the replacement really came up (launcher token file)
-   4. confirms the old process is gone; writes a diagnosis if anything failed
-   v
-new dsh web process  ->  the page sees a new instanceId and reloads itself
-```
+Today those mean walking back to a terminal. This plugin turns them into one click.
 
-## Install
-
-**As a profile bundle** (the usual way, needs the `dsh` CLI with pnpm available):
+## Try it
 
 ```sh
-dsh plugin --profile web add dsh-plugin-restart
+dsh plugin --profile web add github:chenkui-luo/dsh-plugin-restart
 ```
 
-**Without pnpm** (what this plugin's own installer does, and what a profile patched by hand can
-use): copy the package into `<profile>/node_modules/dsh-plugin-restart` and add this row to the
-profile's `cordis.patch.yml`:
+Then **refresh the page once** and open **Settings → Restart**.
+
+Without the `dsh` CLI (no pnpm, or a patched profile): copy the package into
+`<profile>/node_modules/dsh-plugin-restart` and add this row to `<profile>/cordis.patch.yml`:
 
 ```yaml
 - insert:
@@ -45,7 +37,7 @@ profile's `cordis.patch.yml`:
       name: 'dsh-plugin-restart'
 ```
 
-The bundled installer does both steps, with a backup and a read-back check before it writes:
+The bundled installer does both steps with a backup and a read-back check before it writes:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\Install-RestartPlugin.ps1
@@ -53,57 +45,69 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\Install-RestartPlu
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\Install-RestartPlugin.ps1 -Action uninstall
 ```
 
-Then **refresh the page** and open Settings -> Restart. Host-half changes need one restart to take
-effect (Node caches imported ES modules) — and after this plugin is installed, that restart can be
-done with this very button.
+## What happens when you click
 
-## Requirements
+| Step | What runs |
+| --- | --- |
+| 1 | The page sends `POST /dsh-restart/restart` — same origin, authenticated |
+| 2 | The host half starts a **detached helper** and answers the request *before* anything is stopped |
+| 3 | The helper waits for the port to stop accepting connections, then hands over to your launcher |
+| 4 | The launcher starts a fresh `dsh web` with a new launch token and writes its token file |
+| 5 | The helper confirms the replacement is up, then lets the old process exit — gracefully |
+| 6 | The page sees a new instance id on its next poll and reloads itself |
 
-The restart delegates to the launcher a hosted install already has
-(`%LOCALAPPDATA%\DeepSeekHarness\Launch-DeepSeekHarness.ps1`), which owns the reliable
-stop/start/readiness sequence. When it is missing, the button answers with a clear error instead of
-pretending to work, and the status card shows the path it looked for.
-
-Windows-focused: the helper's console handling and the process stop/start behaviour are built for
-it.
-
-Point the plugin at another launcher with `DSH_RESTART_LAUNCHER` (plus `DSH_RESTART_INSTALL_DIR`
-and `DSH_RESTART_DATA`) if your install keeps its files elsewhere.
+Nothing is force-killed in the middle of the response, and the old process is stopped **last**, by
+itself. A restart that fails leaves a diagnosis in the log instead of failing silently.
 
 ## Why the helper is a detached **node** process
 
-Measured on a real machine (reproducible with the probe in the toolkit this plugin came from):
+This part was measured on a real Windows machine, not assumed:
 
-| how the helper is started | does it run | does it outlive its parent |
+| how a background helper is started | does it run | does it outlive the process it must replace |
 | --- | --- | --- |
-| PowerShell, `detached: true` | **no** (exits 0, silently) | — |
-| PowerShell, attached | yes | no (dies with the parent) |
+| PowerShell, `detached: true` | **no** — exits 0, silently | — |
+| PowerShell, attached | yes | no — dies with its parent |
 | **node, `detached: true`** | yes | **yes** |
 | node, attached | yes | no |
 
 On Windows a "detached" PowerShell child gets no console and never runs the script — the same trap
 [dsh-market](https://github.com/dsh-market/dsh-market) documents. An attached helper dies together
-with the process it is supposed to replace. So: a detached node helper, which then gives its own
-children a hidden console through `powershell -WindowStyle Hidden`.
+with the process it is supposed to replace. So the helper is a detached node process, and it gives
+its own children a hidden console through `powershell -WindowStyle Hidden`.
 
-The old process is stopped last, and *by itself*: the helper sends it `SIGTERM` only once the
-replacement is up. Force-killing the whole tree is what leaves a Windows port unbindable long
-enough for the replacement to die with `EADDRINUSE`.
+Force-killing the whole tree is the other half of the story: it leaves a Windows port unbindable
+long enough for the replacement to die with `EADDRINUSE`. Waiting for the port to go quiet and only
+then starting the replacement is what makes the handover reliable.
+
+## Verified, not asserted
+
+| Check | Result |
+| --- | --- |
+| Helper generation, offline (`runtime-test/CheckHelperScript.mjs`) | 11/11 |
+| End to end, real plugin code (`runtime-test/VerifyRestartPlugin.mjs`) | 21/21 |
+| **Real** launcher + **real** `dsh web`, full restart cycle (`runtime-test/SmokeRestartReal.ps1`) | pass |
+
+The end-to-end runs cover: the installer writing a managed patch row, the host half claiming its
+routes, an unauthenticated request being fenced off, the restart being accepted before the port goes
+away, a second click inside the guard window being refused, the port wait, the launcher handover,
+the successor process appearing, and the page noticing it.
+
+These live in the toolkit this plugin was built in; this repository is the packaged plugin.
 
 ## API
 
-Every route passes the connection trust fence (loopback peer + matching `Origin` + login cookie),
-so only an authenticated same-origin page reaches them.
+Every route passes the connection trust fence (loopback peer + matching `Origin` + login cookie), so
+only an authenticated same-origin page can reach them.
 
 | Method | Path | Meaning |
 | --- | --- | --- |
-| GET | `/dsh-restart/status` | `instanceId` (this server's pid), port, workspace, launcher path/availability, whether a restart is in flight |
-| POST | `/dsh-restart/restart` | Arms a restart. A second request within 15 s gets 409. The response carries **no** launch token |
+| GET | `/dsh-restart/status` | `instanceId` (this server's pid), port, workspace, launcher path and availability, whether a restart is in flight |
+| POST | `/dsh-restart/restart` | Arms a restart. A second request within 15 s gets `409`. The response carries **no** launch token |
 | GET | `/dsh-restart/log` | Tail of the shared restart log |
 
-If the automatic reload comes back unauthenticated (a fresh launch token is minted on every start),
-the page's own token is handed back to the *same* browser connection once, so the page can reopen
-itself with `?token=…`.
+If the automatic reload comes back unauthenticated — a fresh launch token is minted on every start —
+the page's own token is handed back to the *same* browser connection once, so it can reopen itself
+with `?token=…`.
 
 ## Logs
 
@@ -112,26 +116,36 @@ restart survives the process that performed it. The helper writes the launcher's
 the port is still being served, and whether a fresh token file appeared, because the process that
 would normally log a failure is the one that just exited.
 
+## Configuration
+
+| Variable | Purpose |
+| --- | --- |
+| `DSH_RESTART_INSTALL_DIR` | Launcher runtime directory (default `%LOCALAPPDATA%\DeepSeekHarness`) |
+| `DSH_RESTART_DATA` | Plugin-private data directory (default `<INSTALL_DIR>\restart-plugin`) |
+| `DSH_RESTART_LAUNCHER` | Point at another launcher script (portable installs, tests) |
+
+**Restart target.** By default it delegates to the launcher a hosted install already has
+(`%LOCALAPPDATA%\DeepSeekHarness\Launch-DeepSeekHarness.ps1`), which owns the reliable
+stop/start/readiness sequence. When that file is missing the button reports a clear error instead of
+pretending to work, and the status card shows the path it looked for. Making the plugin fully
+standalone is the next step on the roadmap.
+
 ## Safety
 
 - Authenticated same-origin loopback only; proxy-forwarded requests are not honoured.
 - No admin rights, no system configuration touched.
 - It **interrupts a running conversation turn** — that is what a restart is, and the card says so.
-- If the port is owned by a process the launcher does not recognise (e.g. a `dsh web` you started by
+- If the port is owned by a process the launcher does not recognise (a `dsh web` you started by
   hand), the restart takes that port over, including its terminal's process tree.
 
 ## Credits
 
-- **DeepSeek Harness (dsh)** — DeepSeek's open-source agent harness, whose plugin protocol
-  (`dsh.bundle` + `cordis.patch.yml`, the dual host/browser plugin shape, and the webserver's
-  trust fence) is what this plugin is built on. Repository:
-  [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) · MIT.
+- **DeepSeek Harness (dsh)** — the open-source agent harness this plugin extends and is built on: its
+  `dsh.bundle` + `cordis.patch.yml` declaration, the dual host/browser plugin shape, and the
+  webserver's trust fence. [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) · MIT.
 - **[dsh-market](https://github.com/dsh-market/dsh-market)** — the community plugin market. Its
-  `restart.js` is the reference for the approach used here: delegate to a detached helper, wait
-  for the port to go quiet instead of guessing with a fixed delay, and make a failed restart leave
-  evidence rather than failing silently.
-- **Watt Toolkit / SteamTools** — nothing to do with the plugin's runtime; mentioned only because
-  its local GitHub accelerator is why `scripts/publish-restart.ps1` has to hand git a certificate.
+  `restart.js` is the reference for the approach used here: delegate to a detached helper, wait for
+  the port instead of guessing with a fixed delay, and make a failed restart leave evidence.
 
 ## License
 
