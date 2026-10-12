@@ -1,0 +1,6 @@
+# dsh bundle patch: inserts this plugin into a profile's layer stack.
+# Used when the plugin is installed as a profile bundle (`dsh plugin --profile web add`);
+# the same row is what the bundled installer writes into a profile's own patch layer.
+- insert:
+    - id: restart
+      name: 'dsh-plugin-restart'

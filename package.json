@@ -1,0 +1,40 @@
+{
+  "name": "dsh-plugin-restart",
+  "version": "1.0.0",
+  "description": "A Restart button for DeepSeek Harness Settings: replaces the dsh web process serving the page, then reconnects the page by itself.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "scripts",
+    "cordis.patch.yml",
+    "README.md",
+    "README.zh.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
+    }
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "restart",
+    "settings"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
