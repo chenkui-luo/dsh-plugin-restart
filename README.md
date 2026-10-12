@@ -9,6 +9,9 @@ desktop icon.
 Useful after changing a plugin's host half, editing `config.json`, or when you want the in-memory
 state of a session gone.
 
+> Published as a standalone repository: **<https://github.com/chenkui-luo/dsh-plugin-restart>**
+> (this copy ships inside the launcher toolkit it was built alongside; the contents match).
+
 ```
 Settings -> Restart -> [Restart server]
    |  POST /dsh-restart/restart        (same-origin, authenticated)
