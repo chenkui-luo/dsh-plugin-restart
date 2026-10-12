@@ -33,6 +33,15 @@
     "restart",
     "settings"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chenkui-luo/dsh-plugin-restart.git"
+  },
+  "homepage": "https://github.com/chenkui-luo/dsh-plugin-restart#readme",
+  "bugs": {
+    "url": "https://github.com/chenkui-luo/dsh-plugin-restart/issues"
+  },
+  "author": "chenkui-luo",
   "engines": {
     "node": ">=20"
   },
