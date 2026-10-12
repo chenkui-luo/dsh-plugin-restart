@@ -39,6 +39,9 @@ $toolkitRoot = Split-Path -Parent (Split-Path -Parent $pluginDir)
 if (-not (Test-Path -LiteralPath (Join-Path $pluginDir 'package.json'))) {
     throw ("could not locate the plugin package from {0}" -f $here)
 }
+Write-Host ("  script dir : {0}" -f $here)
+Write-Host ("  package dir: {0}" -f $pluginDir)
+Write-Host ("  toolkit    : {0}" -f $toolkitRoot)
 # Keep the fetched certificate OUT of the package: inside the toolkit it lives next to the other
 # test-time artefacts, and a standalone checkout falls back to the temp directory.
 $caDir = $(if (Test-Path -LiteralPath (Join-Path $toolkitRoot 'runtime-test')) {
@@ -75,7 +78,9 @@ if ($RefreshCaOnly) { Write-Host ("refreshed: {0}" -f $caFile); exit 0 }
 
 # ---- push --------------------------------------------------------------------------------------
 Write-Host '=== push ===' -ForegroundColor Cyan
-Push-Location $pluginDir
+# -LiteralPath matters: this toolkit's own path contains "[ai]", which Push-Location/Set-Location
+# would read as a wildcard character class (the same trap the installers document).
+Set-Location -LiteralPath $pluginDir
 try {
     $gitArgs = @('-c', 'http.sslBackend=openssl', '-c', "http.sslCAInfo=$caFile")
     if (-not [string]::IsNullOrWhiteSpace($Token)) {
@@ -84,19 +89,24 @@ try {
     } else {
         Write-Host '  (no token supplied - git will prompt, or use a credential helper)'
     }
-    $gitArgs += @('push', $Remote, "HEAD:$Branch")
-    Write-Host ("  git {0}" -f ($gitArgs -join ' '))
-    & git @gitArgs 2>&1 | ForEach-Object {
-        $line = [string]$_
+    # --quiet/--no-progress keep git's progress off stderr: PowerShell 5.1 turns a native
+    # command's stderr into a NativeCommandError even when the command succeeded, so a plain
+    # `2>&1` makes a successful push look like a failure and sets $LASTEXITCODE to 1.
+    $gitArgs += @('push', '--quiet', '--no-progress', $Remote, "HEAD:$Branch")
+    Write-Host ("  git {0}" -f (($gitArgs | Where-Object { $_ -notmatch 'extraHeader' }) -join ' '))
+    $output = & git @gitArgs 2>&1
+    $gitExit = $LASTEXITCODE
+    foreach ($line in @($output)) {
+        $text = [string]$line
         if (-not [string]::IsNullOrWhiteSpace($Token)) {
-            $line = $line.Replace($Token, 'ghp_***').Replace($basic, 'BASIC_***')
+            $text = $text.Replace($Token, 'ghp_***').Replace($basic, 'BASIC_***')
         }
-        Write-Host ("  {0}" -f $line)
+        if (-not [string]::IsNullOrWhiteSpace($text)) { Write-Host ("  {0}" -f $text) }
     }
-    if ($LASTEXITCODE -ne 0) { throw ("git push exited with {0}" -f $LASTEXITCODE) }
+    if ($gitExit -ne 0) { throw ("git push exited with {0}" -f $gitExit) }
     Write-Host ''
     Write-Host ("pushed to https://github.com/{0}" -f $Repo) -ForegroundColor Green
 } finally {
-    Pop-Location
+    Set-Location -LiteralPath (Get-Location).Path  # keep the shell where it was; no stack to unwind
     Remove-Item -LiteralPath $fetcherPath -Force -ErrorAction SilentlyContinue
 }
